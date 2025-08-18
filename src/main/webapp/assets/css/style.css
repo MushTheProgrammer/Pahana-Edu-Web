@@ -1,0 +1,134 @@
+:root {
+    --sidebar-width: 250px;
+    --sidebar-bg: #343a40;
+    --sidebar-active: #495057;
+    --header-bg: #f8f9fa;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    background: var(--sidebar-bg);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+#content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu {
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-menu li {
+    position: relative;
+}
+
+.sidebar-menu li a {
+    color: #adb5bd;
+    text-decoration: none;
+    padding: 1rem;
+    display: block;
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.sidebar-menu li a:hover,
+.sidebar-menu li a.active {
+    color: #fff;
+    background: var(--sidebar-active);
+    border-left: 3px solid #0d6efd;
+}
+
+.sidebar-menu li a i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.card-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+}
+
+.stat-card {
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.header-nav {
+    background: var(--header-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    #content {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #content.active {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+    }
+
+    /* Modal styling */
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #eee;
+        padding: 1.5rem;
+    }
+
+    .modal-title {
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #eee;
+        padding: 1rem 1.5rem;
+    }
+
+    .form-label.required:after {
+        content: " *";
+        color: red;
+    }
+}
