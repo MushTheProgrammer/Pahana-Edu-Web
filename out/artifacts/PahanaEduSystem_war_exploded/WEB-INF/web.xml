@@ -8,4 +8,15 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    
+    <!-- Auth Servlet Mapping -->
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>org.pahanaedu.controller.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/api/auth/*</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
