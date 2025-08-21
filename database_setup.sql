@@ -87,9 +87,9 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (created_by) REFERENCES users(username) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert default admin user (password: admin123)
+-- Insert default Admin user (password: admin@123)
 INSERT INTO users (username, password, full_name, email, role)
-VALUES ('admin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'System Administrator', 'admin@pahanaedu.lk', 'ADMIN')
+VALUES ('Admin', 'admin@123', 'System Administrator', 'admin@pahanaedu.lk', 'ADMIN')
     ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP;
 
 -- Create indexes for better performance
@@ -98,36 +98,3 @@ CREATE INDEX idx_bills_invoice ON bills(invoice_number);
 CREATE INDEX idx_bill_items_bill ON bill_items(bill_id);
 CREATE INDEX idx_bill_items_item ON bill_items(item_code);
 CREATE INDEX idx_payments_bill ON payments(bill_id);
-
--- Create a view for dashboard statistics
-CREATE OR REPLACE VIEW dashboard_stats AS
-SELECT
-    (SELECT COUNT(*) FROM customers) AS total_customers,
-    (SELECT COUNT(*) FROM bills WHERE status = 'COMPLETED') AS total_orders,
-    (SELECT COALESCE(SUM(total_amount), 0) FROM bills WHERE status = 'COMPLETED') AS total_revenue,
-    (SELECT COUNT(*) FROM items WHERE qty_on_hand <= reorder_level) AS low_stock_items;
-
--- Create a view for sales report
-CREATE OR REPLACE VIEW sales_report AS
-SELECT
-    b.invoice_number,
-    b.bill_date,
-    c.name AS customer_name,
-    c.phone AS customer_phone,
-    b.subtotal,
-    b.tax_amount,
-    b.discount_amount,
-    b.total_amount,
-    b.payment_method,
-    b.payment_status,
-    u.full_name AS cashier
-FROM
-    bills b
-        LEFT JOIN
-    customers c ON b.customer_account_no = c.account_no
-        LEFT JOIN
-    users u ON b.created_by = u.username
-WHERE
-    b.status = 'COMPLETED'
-ORDER BY
-    b.bill_date DESC;
