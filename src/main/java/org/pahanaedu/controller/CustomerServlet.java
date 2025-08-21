@@ -50,6 +50,9 @@ public class CustomerServlet extends HttpServlet {
             int page = pageStr != null ? Integer.parseInt(pageStr) : 1;
             int size = sizeStr != null ? Integer.parseInt(sizeStr) : 10;
 
+            // Debug logging
+            System.out.println("CustomerServlet - Search params: acc=" + acc + ", name=" + name + ", email=" + email + ", phone=" + phone);
+
             List<Customer> customers = (acc!=null || name!=null || email!=null || phone!=null || sort!=null)
                     ? service.searchCustomers(nonNull(acc), nonNull(name), nonNull(email), nonNull(phone), page, size, sort, dir)
                     : service.searchCustomers("","","","", page, size, sort, dir);
