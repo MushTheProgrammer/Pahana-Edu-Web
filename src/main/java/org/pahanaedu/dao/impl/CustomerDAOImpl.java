@@ -41,13 +41,25 @@ public class CustomerDAOImpl implements CustomerDAO {
         StringBuilder sql = new StringBuilder("SELECT * FROM customers WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        if (acc != null && !acc.isEmpty()) {
-            sql.append(" AND LOWER(account_no) LIKE ?");
+        // Debug logging
+        System.out.println("CustomerDAO - Search params: acc=" + acc + ", name=" + name + ", email=" + email + ", phone=" + phone);
+
+        // Handle search logic - if acc and name are the same, use OR logic for better search
+        if (acc != null && !acc.isEmpty() && name != null && !name.isEmpty() && acc.equals(name)) {
+            // Same search term for both fields - use OR logic
+            sql.append(" AND (LOWER(account_no) LIKE ? OR LOWER(name) LIKE ?)");
             params.add("%" + acc.toLowerCase() + "%");
-        }
-        if (name != null && !name.isEmpty()) {
-            sql.append(" AND LOWER(name) LIKE ?");
             params.add("%" + name.toLowerCase() + "%");
+        } else {
+            // Different search terms - use AND logic
+            if (acc != null && !acc.isEmpty()) {
+                sql.append(" AND LOWER(account_no) LIKE ?");
+                params.add("%" + acc.toLowerCase() + "%");
+            }
+            if (name != null && !name.isEmpty()) {
+                sql.append(" AND LOWER(name) LIKE ?");
+                params.add("%" + name.toLowerCase() + "%");
+            }
         }
 
         if (email != null && !email.isEmpty()) {
@@ -75,6 +87,10 @@ public class CustomerDAOImpl implements CustomerDAO {
         if (limit > 0) {
             sql.append(" LIMIT ? OFFSET ?");
         }
+
+        // Debug logging
+        System.out.println("CustomerDAO - Final SQL: " + sql.toString());
+        System.out.println("CustomerDAO - Parameters: " + params);
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
